@@ -634,7 +634,7 @@ namespace ZBase.Foundation
                 destination[heightLength++] = ' ';
                 destination = destination[heightLength..];
 
-                if (value.refreshRate.TryFormat(destination, out var refreshRateLength, format) == false)
+                if (((int)System.Math.Round(value.refreshRateRatio.value)).TryFormat(destination, out var refreshRateLength, format) == false)
                 {
                     return False(out charsWritten);
                 }

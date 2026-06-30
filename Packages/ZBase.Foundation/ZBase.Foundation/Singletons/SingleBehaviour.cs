@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ZBase.Foundation.Singletons
 {
@@ -45,19 +47,35 @@ namespace ZBase.Foundation.Singletons
             EveryScenes = 2,
         }
 
+        private static readonly List<Action> s_resetCallbacks = new();
+
         public static T Of<T>(Lifetime lifetime = Lifetime.Default) where T : MonoBehaviour
             => Single<T>.GetInstance(lifetime);
+
+        /// <seealso href="https://docs.unity3d.com/Manual/DomainReloading.html"/>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Init()
+        {
+            lock (s_resetCallbacks)
+            {
+                foreach (var reset in s_resetCallbacks)
+                {
+                    reset();
+                }
+            }
+        }
 
         private static class Single<T> where T : MonoBehaviour
         {
             private static readonly object s_lock = new();
             private static T s_instance;
 
-            /// <seealso href="https://docs.unity3d.com/Manual/DomainReloading.html"/>
-            [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-            static void Init()
+            static Single()
             {
-                s_instance = null;
+                lock (s_resetCallbacks)
+                {
+                    s_resetCallbacks.Add(static () => s_instance = null);
+                }
             }
 
             public static T GetInstance(Lifetime lifetime)
@@ -66,7 +84,7 @@ namespace ZBase.Foundation.Singletons
                 {
                     lock (s_lock)
                     {
-                        s_instance = Object.FindObjectOfType<T>();
+                        s_instance = UnityEngine.Object.FindAnyObjectByType<T>();
 
                         if (s_instance == false)
                         {
@@ -74,7 +92,7 @@ namespace ZBase.Foundation.Singletons
 
                             if (lifetime == Lifetime.EveryScenes)
                             {
-                                Object.DontDestroyOnLoad(gameObject);
+                                UnityEngine.Object.DontDestroyOnLoad(gameObject);
                             }
 
                             s_instance = gameObject.AddComponent<T>();

@@ -24,7 +24,6 @@ namespace ZBase.Foundation
             Init();
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Init()
         {
             var nameMap = s_nameMap ??= new Dictionary<T, string>();

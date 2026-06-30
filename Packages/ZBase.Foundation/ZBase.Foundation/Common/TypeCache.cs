@@ -16,8 +16,6 @@ namespace ZBase.Foundation
             Init();
         }
 
-        /// <seealso href="https://docs.unity3d.com/Manual/DomainReloading.html"/>
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Init()
         {
             s_type = typeof(T);

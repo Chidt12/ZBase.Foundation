@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ZBase.Foundation.Singletons
@@ -9,6 +10,8 @@ namespace ZBase.Foundation.Singletons
     /// </summary>
     public static partial class Singleton
     {
+        private static readonly List<Action> s_resetCallbacks = new();
+
         public static T Of<T>() where T : class, new()
             => Single<T>.GetInstance(() => new T());
 
@@ -20,15 +23,29 @@ namespace ZBase.Foundation.Singletons
             return Single<T>.GetInstance(instantiator);
         }
 
+        /// <seealso href="https://docs.unity3d.com/Manual/DomainReloading.html"/>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Init()
+        {
+            lock (s_resetCallbacks)
+            {
+                foreach (var reset in s_resetCallbacks)
+                {
+                    reset();
+                }
+            }
+        }
+
         private static class Single<T> where T : class
         {
             private static T s_instance;
 
-            /// <seealso href="https://docs.unity3d.com/Manual/DomainReloading.html"/>
-            [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-            static void Init()
+            static Single()
             {
-                s_instance = null;
+                lock (s_resetCallbacks)
+                {
+                    s_resetCallbacks.Add(static () => s_instance = null);
+                }
             }
 
             public static T GetInstance(Func<T> instantiator)
