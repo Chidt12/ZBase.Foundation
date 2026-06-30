@@ -260,19 +260,10 @@
       }
     },
     "com.zbase.foundation": {
-      "version": "file:ZBase.Foundation",
+      "version": "file:com.zbase.foundation",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {
-        "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0"
-      }
-    },
-    "org.nuget.system.runtime.compilerservices.unsafe": {
-      "version": "6.0.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "dependencies": {}
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
