@@ -11,7 +11,6 @@
     "com.unity.multiplayer.center": "1.0.1",
     "com.unity.test-framework": "1.6.0",
     "com.unity.ugui": "2.0.0",
-    "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
@@ -55,10 +54,7 @@
         "com.cysharp.unitask",
         "com.cysharp.zstring",
         "com.faster-games.t4",
-        "com.laicasaane.collections.pooled",
-        "com.laicasaane.unity.pooling",
-        "com.openupm",
-        "org.nuget.system.runtime.compilerservices.unsafe"
+        "com.openupm"
       ]
     }
   ]
